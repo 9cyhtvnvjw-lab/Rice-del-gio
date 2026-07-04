@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La ricetta di oggi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Newsreader:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#241608;
+    --paper:#F2E6C9;
+    --backdrop:#1E2A1D;
+    --backdrop-2:#141D13;
+    --mustard:#D6A63A;
+    --olive:#5C6E3C;
+    --brick:#8C2F1B;
+    --paper-shadow: rgba(0,0,0,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(214,166,58,0.08), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(140,47,27,0.10), transparent 45%),
+      var(--backdrop);
+    background-color:var(--backdrop);
+    font-family:'Newsreader', serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:32px 16px 60px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:28px;
+  }
+  header .eyebrow{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--mustard);
+    margin-bottom:8px;
+  }
+  header h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(28px,5vw,42px);
+    color:#F2E6C9;
+    margin:0;
+  }
+  #card-wrap{
+    perspective:1200px;
+    width:100%;
+    max-width:520px;
+  }
+  .card{
+    position:relative;
+    background:var(--paper);
+    border-radius:6px;
+    box-shadow:0 18px 40px var(--paper-shadow), 0 2px 0 rgba(0,0,0,0.15) inset;
+    padding:34px 28px 30px 44px;
+    min-height:340px;
+    animation:settle 0.5s ease;
+    transform-origin:top center;
+  }
+  @keyframes settle{
+    from{ opacity:0; transform: rotate(-2deg) translateY(14px); }
+    to{ opacity:1; transform: rotate(0deg) translateY(0); }
+  }
+  .margin-rule{
+    position:absolute;
+    top:0; bottom:0; left:26px;
+    width:2px;
+    background:var(--brick);
+    opacity:0.55;
+  }
+  .holes{
+    position:absolute;
+    left:8px; top:0; bottom:0;
+    width:12px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+    padding:26px 0;
+  }
+  .holes span{
+    width:10px; height:10px;
+    border-radius:50%;
+    background:var(--backdrop);
+    box-shadow:inset 0 2px 3px rgba(0,0,0,0.5);
+  }
+  .stamp{
+    position:absolute;
+    top:-14px; right:18px;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--brick);
+    border:2px dashed var(--brick);
+    border-radius:4px;
+    padding:6px 10px;
+    background:rgba(242,230,201,0.95);
+    transform:rotate(-6deg);
+    box-shadow:0 4px 10px rgba(0,0,0,0.25);
+  }
+  .tag-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin:2px 0 14px;
+  }
+  .tag{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border-radius:999px;
+    background:var(--olive);
+    color:#F2E6C9;
+  }
+  .tag.fast{ background:var(--brick); }
+  h2.recipe-title{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(22px,4vw,30px);
+    margin:0 0 12px;
+    line-height:1.15;
+  }
+  .thumb{
+    width:100%;
+    max-height:190px;
+    object-fit:cover;
+    border-radius:4px;
+    margin-bottom:16px;
+    filter:sepia(8%);
+  }
+  h3.section-label{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--olive);
+    border-bottom:1px solid rgba(92,110,60,0.35);
+    padding-bottom:4px;
+    margin:20px 0 10px;
+  }
+  ul.ingredients{
+    list-style:none;
+    margin:0; padding:0;
+    font-family:'Space Mono', monospace;
+    font-size:13.5px;
+    line-height:1.9;
+  }
+  ul.ingredients li::before{
+    content:"▢ ";
+    color:var(--brick);
+  }
+  ol.steps{
+    margin:0; padding-left:20px;
+    font-size:15.5px;
+    line-height:1.65;
+  }
+  ol.steps li{ margin-bottom:10px; }
+  .actions{
+    margin-top:26px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  button#another-btn{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    background:transparent;
+    color:var(--mustard);
+    border:1.5px solid var(--mustard);
+    border-radius:999px;
+    padding:10px 20px;
+    cursor:pointer;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  button#another-btn:hover{
+    background:var(--mustard);
+    color:var(--backdrop-2);
+  }
+  button#another-btn:focus-visible{
+    outline:2px solid #F2E6C9;
+    outline-offset:2px;
+  }
+  .hint{
+    font-family:'Space Mono', monospace;
+    font-size:11px;
+    color:rgba(242,230,201,0.55);
+    text-align:center;
+    max-width:320px;
+  }
+  .state-msg{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    color:var(--ink);
+    text-align:center;
+    padding:40px 10px;
+  }
+  .dot-pulse{
+    display:inline-block;
+    animation:pulse 1.1s infinite ease-in-out;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:0.25;}
+    50%{opacity:1;}
+  }
+  @media (max-width:480px){
+    .card{ padding:30px 20px 26px 38px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Oggi in cucina</div>
+  <h1>Cosa cucino oggi?</h1>
+</header>
+
+<div id="card-wrap">
+  <div class="card" id="card">
+    <div class="holes"><span></span><span></span><span></span></div>
+    <div class="margin-rule"></div>
+    <div class="stamp" id="stamp">— caricamento —</div>
+    <div id="content">
+      <p class="state-msg">Sto sfogliando il ricettario<span class="dot-pulse">…</span></p>
+    </div>
+  </div>
+</div>
+
+<div class="actions">
+  <button id="another-btn">Un'altra idea per oggi</button>
+  <p class="hint">La ricetta si aggiorna da sola una volta al giorno, pescando da un ricettario online. Puoi chiederne un'altra quando vuoi.</p>
+</div>
+
+<script>
+  const STORAGE_KEY = 'daily-recipe-v1';
+  const MESI = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+
+  function localDateKey(){
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth()+1).padStart(2,'0');
+    const day = String(d.getDate()).padStart(2,'0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function formatItalianDate(key){
+    const [y,m,d] = key.split('-').map(Number);
+    return `${d} ${MESI[m-1]}`;
+  }
+
+  function parseMeal(meal){
+    const ingredients = [];
+    for(let i=1;i<=20;i++){
+      const ing = meal[`strIngredient${i}`];
+      const meas = meal[`strMeasure${i}`];
+      if(ing && ing.trim()){
+        ingredients.push(`${meas && meas.trim() ? meas.trim()+' ' : ''}${ing.trim()}`);
+      }
+    }
+    const steps = (meal.strInstructions || '')
+      .split(/\r?\n+/)
+      .flatMap(s => s.split(/(?<=[.!?])\s+(?=[A-ZÀ-Ù])/))
+      .map(s => s.trim())
+      .filter(Boolean);
+    return {
+      name: meal.strMeal,
+      area: meal.strArea,
+      category: meal.strCategory,
+      image: meal.strMealThumb,
+      ingredients,
+      steps
+    };
+  }
+
+  async function fetchOneMeal(){
+    const res = await fetch('https://www.themealdb.com/api/json/v1/1/random.php');
+    if(!res.ok) throw new Error('network');
+    const data = await res.json();
+    return parseMeal(data.meals[0]);
+  }
+
+  async function fetchQuickRecipe(){
+    let best = null;
+    for(let i=0;i<6;i++){
+      const parsed = await fetchOneMeal();
+      if(!best || parsed.ingredients.length + parsed.steps.length < best.ingredients.length + best.steps.length){
+        best = parsed;
+      }
+      if(parsed.ingredients.length <= 8 && parsed.steps.length <= 8){
+        return { recipe: parsed, isQuick: true };
+      }
+    }
+    return { recipe: best, isQuick: false };
+  }
+
+  async function loadStorage(){
+    try{
+      const r = await window.storage.get(STORAGE_KEY);
+      return r ? JSON.parse(r.value) : null;
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function saveStorage(payload){
+    try{
+      await window.storage.set(STORAGE_KEY, JSON.stringify(payload));
+    }catch(e){
+      console.error('Impossibile salvare la ricetta del giorno', e);
+    }
+  }
+
+  function showLoading(){
+    document.getElementById('content').innerHTML =
+      '<p class="state-msg">Sto sfogliando il ricettario<span class="dot-pulse">…</span></p>';
+    document.getElementById('stamp').textContent = '— caricamento —';
+  }
+
+  function showError(){
+    document.getElementById('content').innerHTML =
+      '<p class="state-msg">Non riesco a raggiungere il ricettario online in questo momento.<br>Controlla la connessione e riprova.</p>';
+  }
+
+  function render(recipe, dateKey, isQuick){
+    document.getElementById('stamp').textContent = `Oggi · ${formatItalianDate(dateKey)}`;
+
+    const ingredientsHtml = recipe.ingredients.map(i => `<li>${i}</li>`).join('');
+    const stepsHtml = recipe.steps.map(s => `<li>${s}</li>`).join('');
+
+    document.getElementById('content').innerHTML = `
+      <div class="tag-row">
+        ${recipe.area ? `<span class="tag">${recipe.area}</span>` : ''}
+        ${recipe.category ? `<span class="tag">${recipe.category}</span>` : ''}
+        <span class="tag fast">${isQuick ? 'Veloce' : 'Un po\' più elaborata'}</span>
+        <span class="tag">${recipe.ingredients.length} ingredienti</span>
+      </div>
+      <h2 class="recipe-title">${recipe.name}</h2>
+      ${recipe.image ? `<img class="thumb" src="${recipe.image}" alt="${recipe.name}">` : ''}
+      <h3 class="section-label">Cosa serve</h3>
+      <ul class="ingredients">${ingredientsHtml}</ul>
+      <h3 class="section-label">Come si fa</h3>
+      <ol class="steps">${stepsHtml}</ol>
+    `;
+  }
+
+  async function init(force){
+    showLoading();
+    const key = localDateKey();
+
+    if(!force){
+      const stored = await loadStorage();
+      if(stored && stored.date === key && stored.recipe){
+        render(stored.recipe, stored.date, stored.isQuick);
+        return;
+      }
+    }
+
+    try{
+      const { recipe, isQuick } = await fetchQuickRecipe();
+      await saveStorage({ date: key, recipe, isQuick });
+      render(recipe, key, isQuick);
+    }catch(e){
+      showError();
+    }
+  }
+
+  document.getElementById('another-btn').addEventListener('click', () => init(true));
+  window.addEventListener('DOMContentLoaded', () => init(false));
+</script>
+
+</body>
+</html>
